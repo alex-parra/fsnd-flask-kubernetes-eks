@@ -1,4 +1,4 @@
-# Deploying a Flask API
+# Flask API deploy to Kubernetes on AWS
 
 ## Run Docker
 
