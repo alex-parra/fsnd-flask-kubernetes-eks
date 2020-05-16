@@ -1,29 +1,61 @@
 # Deploying a Flask API
 
+## Run Docker
+
+1. cd into repo root folder
+2. Copy `env_file.sample` to `env_file`
+3. Set the values of the variables in `env_file`
+4. Build the Docker image: `docker build --tag jwt-api-test .`
+   - Check the image is present with `docker images | grep jwt-api-test`
+5. Run the Docker container: `docker run --env-file=env_file -p 80:8080 jwt-api-test`
+6. Health check at `http://localhost/` (port 80)
+
+## Endpoints
+
+`GET /`  
+Health check endpoint
+
+`POST /auth`  
+Login endpoint
+
+- Request Body `{ "email": string, "password": string }`
+- Response Body `{ "token": "eyJ0...." }`
+
+`GET /contents`  
+Get JWT payload
+
+- Headers: `{ "Authorization": "Bearer eyJ0...." }`
+- Response Body: `{ "email": string, "exp": number, "nbf": number }`
+
+---
+
+## Original README from starter repo
+
 This is the project starter repo for the fourth course in the [Udacity Full Stack Nanodegree](https://www.udacity.com/course/full-stack-web-developer-nanodegree--nd004): Server Deployment, Containerization, and Testing.
 
 In this project you will containerize and deploy a Flask API to a Kubernetes cluster using Docker, AWS EKS, CodePipeline, and CodeBuild.
 
 The Flask app that will be used for this project consists of a simple API with three endpoints:
 
-- `GET '/'`: This is a simple health check, which returns the response 'Healthy'. 
+- `GET '/'`: This is a simple health check, which returns the response 'Healthy'.
 - `POST '/auth'`: This takes a email and password as json arguments and returns a JWT based on a custom secret.
-- `GET '/contents'`: This requires a valid JWT, and returns the un-encrpyted contents of that token. 
+- `GET '/contents'`: This requires a valid JWT, and returns the un-encrpyted contents of that token.
 
 The app relies on a secret set as the environment variable `JWT_SECRET` to produce a JWT. The built-in Flask server is adequate for local development, but not production, so you will be using the production-ready [Gunicorn](https://gunicorn.org/) server when deploying the app.
 
 ## Initial setup
+
 1. Fork this project to your Github account.
 2. Locally clone your forked version to begin working on the project.
 
 ## Dependencies
 
 - Docker Engine
-    - Installation instructions for all OSes can be found [here](https://docs.docker.com/install/).
-    - For Mac users, if you have no previous Docker Toolbox installation, you can install Docker Desktop for Mac. If you already have a Docker Toolbox installation, please read [this](https://docs.docker.com/docker-for-mac/docker-toolbox/) before installing.
- - AWS Account
-     - You can create an AWS account by signing up [here](https://aws.amazon.com/#).
-     
+  - Installation instructions for all OSes can be found [here](https://docs.docker.com/install/).
+  - For Mac users, if you have no previous Docker Toolbox installation, you can install Docker Desktop for Mac. If you already have a Docker Toolbox installation, please read [this](https://docs.docker.com/docker-for-mac/docker-toolbox/) before installing.
+- AWS Account
+  - You can create an AWS account by signing up [here](https://aws.amazon.com/#).
+
 ## Project Steps
 
 Completing the project involves several steps:
